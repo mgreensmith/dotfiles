@@ -20,7 +20,7 @@ task :update => [
 #  :ssh,
 #  :vim,
 #  :vimrc,
-#  :zshrc,
+  :zshrc,
 #  :bin
 ]
 
