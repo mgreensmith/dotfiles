@@ -25,3 +25,5 @@
 	enabled = 1
 [core]
 	excludesfile = /Users/matt/.gitignore
+[credential]
+	helper = osxkeychain
