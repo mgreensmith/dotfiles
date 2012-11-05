@@ -10,6 +10,7 @@ task :install => :update
 
 desc "Creates/updates symlinks in home directory"
 task :update => [
+   :dotfiles_location,
 #  :autotest,
 #  :gemrc,
   :gitconfig,
@@ -24,6 +25,7 @@ task :update => [
 #  :bin
 ]
 
+task :dotfiles_location => home('.dotfiles_location')
 task :autotest => home('.autotest')
 task :gemrc => home('.gemrc')
 task :gitconfig => home('.gitconfig')
@@ -36,6 +38,10 @@ task :vim => home('.vim')
 task :vimrc => home('.vimrc')
 task :zshrc => home('.zshrc')
 task :bin => home('bin')
+
+file home('.dotfiles_location') do 
+  ln_s this, home('.dotfiles_location')
+end
 
 file home('.autotest') do
   ln_s this('autotest'), home('.autotest')

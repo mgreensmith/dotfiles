@@ -1,13 +1,13 @@
 if [[ -e $HOME/.dotfiles_location ]]; then
-  export DOTFILES=$(cat $HOME/.dotfiles_location)
+  export DOTFILES=$(readlink $HOME/.dotfiles_location)
 else
   export DOTFILES=$HOME/repos/dotfiles
   echo "~/.dotfiles_location not found, reinstall dotfiles"
 fi
 
-for dir in $DOTFILES/bin/*(/); do
-  export PATH=$dir:$PATH
-done
+#for dir in $DOTFILES/bin/*(/); do
+#  export PATH=$dir:$PATH
+#done
 
 source $HOME/repos/zshuery/zshuery.sh
 load_defaults
