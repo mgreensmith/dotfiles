@@ -1,3 +1,7 @@
+export LSCOLORS="Gxfxcxdxbxegedabagacad"
+alias ls="ls -G"
+alias l="ls"
+alias ll="ls -la"
 alias g="git"
 alias gc="git commit -am"
 alias gco="git checkout"
