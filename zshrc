@@ -9,6 +9,7 @@ fi
 #  export PATH=$dir:$PATH
 #done
 
+source $DOTFILES/rc
 source $HOME/repos/zshuery/zshuery.sh
 load_defaults
 load_aliases
