@@ -28,3 +28,5 @@ prompts '%{$fg_bold[green]%}$(COLLAPSED_DIR)%{$reset_color%}$(virtualenv_info) %
 chpwd() {
     update_terminal_cwd
 }
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
