@@ -30,3 +30,5 @@ chpwd() {
 }
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+export OPSCODE_USER=mgreensmith
