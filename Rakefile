@@ -10,7 +10,8 @@ dotfiles = {
   '.dotfiles_location' => '',
   '.gitconfig' => 'gitconfig',
   '.zshrc' => 'zshrc',
-  '.vim_runtime' => 'vimrc'
+  '.vim_runtime' => 'vimrc',
+  '.ssh/config' => 'ssh_config'
 }
 
 task :install => :update
@@ -24,6 +25,7 @@ task :update => [
 task :check_repos do
   sh %{git submodule update --init --recursive}
 end
+
 
 dotfiles.each do |target,src|
   file home(target) do
