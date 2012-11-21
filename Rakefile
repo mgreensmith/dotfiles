@@ -6,88 +6,33 @@ def this(*args)
   File.join(File.expand_path(File.dirname(__FILE__)), *args)
 end
 
+dotfiles = {
+  '.dotfiles_location' => '',
+  '.gitconfig' => 'gitconfig',
+  '.zshrc' => 'zshrc',
+  '.vim_runtime' => 'vimrc'
+}
+
 task :install => :update
 
-desc "Creates/updates symlinks in home directory"
 task :update => [
-   :dotfiles_location,
-#  :autotest,
-#  :gemrc,
-  :gitconfig,
-#  :gitignore,
-#  :irbrc,
-#  :screenrc,
-#  :tmux,
-#  :ssh,
-#  :vim,
-#  :vimrc,
-  :zshrc,
-#  :bin
+  :check_repos,
+  :make_symlinks,
+  :install_vimrc
 ]
 
-task :dotfiles_location => home('.dotfiles_location')
-task :autotest => home('.autotest')
-task :gemrc => home('.gemrc')
-task :gitconfig => home('.gitconfig')
-task :gitignore => home('.gitignore')
-task :irbrc => home('.irbrc')
-task :screenrc => home('.screenrc')
-task :tmux => home('.tmux.conf')
-task :ssh => home('.ssh')
-task :vim => home('.vim')
-task :vimrc => home('.vimrc')
-task :zshrc => home('.zshrc')
-task :bin => home('bin')
-
-file home('.dotfiles_location') do 
-  ln_s this, home('.dotfiles_location')
+task :check_repos do
+  sh %{git submodule foreach --recursive git pull}
 end
 
-file home('.autotest') do
-  ln_s this('autotest'), home('.autotest')
+dotfiles.each do |target,src|
+  file home(target) do
+    ln_s this(src), home(target)
+  end
+  task :make_symlinks => home(target) 
 end
 
-file home('.gemrc') do
-  ln_s this('gemrc'), home('.gemrc')
+task :install_vimrc do
+  sh %{sh vimrc/install_awesome_vimrc.sh}
 end
 
-file home('.gitconfig') do
-  ln_s this('gitconfig'), home('.gitconfig')
-end
-
-file home('.gitignore') do
-  ln_s this('gitignore'), home('.gitignore')
-end
-
-file home('.irbrc') do
-  ln_s this('irbrc'), home('.irbrc')
-end
-
-file home('.screenrc') do
-  ln_s this('screenrc'), home('.screenrc')
-end
-
-file home('.tmux.conf') do
-  ln_s this('tmux.conf'), home('.tmux.conf')
-end
-
-file home('.ssh') do
-  ln_s home('Dropbox/Personal/.ssh'), home('.ssh')
-  chmod(0600, File.join(home('.ssh'), 'id_dsa'))
-end
-
-file home('.vim') do
-  ln_s this('vim'), home('.vim')
-end
-
-file home('.vimrc') do
-  ln_s this('vimrc'), home('.vimrc')
-end
-
-file home('.zshrc') do
-  ln_s this('zshrc'), home('.zshrc')
-end
-
-file home('bin') do
-  ln_s this('bin'), home('bin')
-end
