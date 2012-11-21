@@ -3,6 +3,8 @@ alias ls="ls -G"
 alias l="ls"
 alias ll="ls -la"
 
+alias subl="nocorrect subl"
+
 #===========================
 
 # Aliases
