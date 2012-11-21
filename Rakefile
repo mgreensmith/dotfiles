@@ -22,7 +22,7 @@ task :update => [
 ]
 
 task :check_repos do
-  sh %{git submodule foreach --recursive git pull}
+  sh %{git submodule update --init --recursive}
 end
 
 dotfiles.each do |target,src|
