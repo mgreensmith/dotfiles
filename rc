@@ -10,6 +10,7 @@ alias ksg="knife status | grep"
 alias role="nocorrect role"
 alias node="nocorrect node"
 alias environment="nocorrect environment"
+alias cookbook="nocorrect cookbook"
 #===========================
 
 # Aliases
@@ -27,8 +28,10 @@ alias gb='git branch'
 alias gba='git branch -a'
 alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
+alias glgp="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --"
 alias glg='git log --stat --max-count=5'
 alias glgg='git log --graph --max-count=5'
+alias glgo='git log --stat --oneline'
 alias gss='git status -s'
 alias ga='git add'
 alias gm='git merge'
