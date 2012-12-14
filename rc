@@ -11,6 +11,10 @@ alias role="nocorrect role"
 alias node="nocorrect node"
 alias environment="nocorrect environment"
 alias cookbook="nocorrect cookbook"
+alias krff="knife role from file"
+alias keff="knife environment from file"
+alias kdff="knife data bag from file"
+alias kcu="knife cookbook upload"
 #===========================
 
 # Aliases
