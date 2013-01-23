@@ -2,8 +2,15 @@ export LSCOLORS="Gxfxcxdxbxegedabagacad"
 alias ls="ls -G"
 alias l="ls"
 alias ll="ls -la"
-
+alias ltree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
 alias subl="nocorrect subl"
+
+alias rscp="rsync --partial --progress --rsh=ssh"
+alias du1='du -h --max-depth=1'
+alias fn='find . -name'
+alias hi='history | tail -20'
+alias pg="ps ax | grep -v grep | grep -i "
+alias ip="ifconfig | grep 'inet '"
 
 alias k="knife"
 alias ksg="knife status | grep"
@@ -15,6 +22,10 @@ alias krff="knife role from file"
 alias keff="knife environment from file"
 alias kdff="knife data bag from file"
 alias kcu="knife cookbook upload"
+alias kssh="knife ssh -a ipaddress -x mgreensmith"
+alias knra="knife node run_list add"
+alias knrr="knife node run_list remove"
+
 #===========================
 
 # Aliases
