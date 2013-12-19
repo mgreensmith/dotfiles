@@ -12,7 +12,9 @@ alias hi='history | tail -20'
 alias pg="ps ax | grep -v grep | grep -i "
 alias ip="ifconfig | grep 'inet '"
 
+alias knife="nocorrect knife"
 alias k="knife"
+alias ks="knife status"
 alias ksg="knife status | grep"
 alias role="nocorrect role"
 alias node="nocorrect node"
@@ -25,6 +27,14 @@ alias kcu="knife cookbook upload"
 alias kssh="knife ssh -a ipaddress -x mgreensmith"
 alias knra="knife node run_list add"
 alias knrr="knife node run_list remove"
+
+alias v="vagrant"
+alias vu="vagrant up"
+alias vup="vagrant up --provision"
+alias vp="vagrant provision"
+alias vd="vagrant destroy -f"
+alias vh="vagrant halt"
+alias vs="vagrant status"
 
 #===========================
 
@@ -124,4 +134,11 @@ exist_gh() { # [DIRECTORY]
 
     git remote add origin git@github.com:${ghuser}/${repo}.git
     git push -u origin master
+}
+
+new_repo() { #[NAME]
+    mkdir "$1"
+    cd "$1"
+    rvm --ruby-version use 1.9.3@$1 --create
+    echo "source 'http://rubygems.org'" > Gemfile
 }

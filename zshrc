@@ -22,8 +22,7 @@ chpwd() {
     update_terminal_cwd
 }
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+PATH=$PATH:$HOME/.rvm/bin:/usr/local/sbin:$HOME/bin:/usr/local/bin # Add RVM to PATH for scripting
 
 export OPSCODE_USER=mgreensmith
 
-PATH=$PATH:/usr/local/sbin
