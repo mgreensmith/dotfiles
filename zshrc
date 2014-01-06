@@ -22,7 +22,9 @@ chpwd() {
     update_terminal_cwd
 }
 
-PATH=$PATH:$HOME/.rvm/bin:/usr/local/sbin:$HOME/bin:/usr/local/bin # Add RVM to PATH for scripting
+PATH=$HOME/.rbenv/bin:/usr/local/sbin:$HOME/bin:/usr/local/bin:$PATH # Add Rbenv to PATH
 
 export OPSCODE_USER=mgreensmith
 
+export RBENV_ROOT=/usr/local/var/rbenv
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
