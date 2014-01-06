@@ -142,3 +142,7 @@ new_repo() { #[NAME]
     rvm --ruby-version use 1.9.3@$1 --create
     echo "source 'http://rubygems.org'" > Gemfile
 }
+
+ruby_gemset() {
+    rbenv gemset active 2>&1 | cut -d' ' -f1 -
+}
