@@ -1,3 +1,14 @@
+Host github-cozy
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/cozy
+    IdentitiesOnly yes
 
+Host github-cozyredis
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/cozy-redis
+    IdentitiesOnly yes
+    
 Host *
 User mgreensmith
