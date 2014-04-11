@@ -32,6 +32,8 @@ alias kcu="knife cookbook upload"
 alias kssh="knife ssh -a ipaddress -x mgreensmith"
 alias knra="knife node run_list add"
 alias knrr="knife node run_list remove"
+dbagshow() { knife data bag show $@ -Fj }
+edbagshow() { knife data bag show $@ -Fj --secret-file /Users/matt/repos/secret_data_bags/encrypted_data_bag_secret }
 
 alias b="berks"
 alias bu="berks upload"
@@ -46,6 +48,7 @@ alias vh="vagrant halt"
 alias vs="vagrant status"
 alias vssh="vagrant ssh"
 alias vk="vd && rm Berksfile.lock && rm -rf ~/.berkshelf/default/vagrant && vu"
+alias killvms='for i in `VBoxManage list runningvms | cut -d" " -f1 | sed "s/\"//g"`; do echo "killing $i"; VBoxManage controlvm $i poweroff; done'
 
 alias g='git'
 alias gst='git status'
@@ -60,6 +63,7 @@ alias gcob='git checkout -b'
 alias gcm='git checkout master'
 alias gb='git branch'
 alias gba='git branch -a'
+alias gbd='git branch -D'
 alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
 alias glgp="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --"
@@ -164,4 +168,8 @@ new_repo() { #[NAME]
 
 ruby_gemset() {
     rbenv gemset active 2>&1 | cut -d' ' -f1 -
+}
+
+csr() { # [Domain]
+    openssl req -out $1.csr -new -newkey rsa:2048 -nodes -keyout $1.private.key
 }
