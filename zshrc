@@ -8,7 +8,11 @@ source $DOTFILES/rc
 source $DOTFILES/zshuery/zshuery.sh
 load_defaults
 load_aliases
-load_completion $DOTFILES/zshuery/completion
+
+export COZY_PROJECTS_DIR="$HOME/repos"
+export PATH="$COZY_PROJECTS_DIR/cozy-dotfiles:$PATH"
+
+load_completion $DOTFILES/zshuery/completion $COZY_PROJECTS_DIR/cozy-dotfiles/completion
 load_correction
 
 prompt_char() {
@@ -26,5 +30,20 @@ PATH=$HOME/.rbenv/bin:/usr/local/sbin:$HOME/bin:/usr/local/bin:$PATH # Add Rbenv
 
 export OPSCODE_USER=mgreensmith
 
+# rbenv
 export RBENV_ROOT=/usr/local/var/rbenv
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+# heroku
+export PATH="/usr/local/heroku/bin:$PATH"
+
+export EC2_HOME="/usr/local/Cellar/ec2-api-tools/1.7.1.0/libexec"
+export AWS_IAM_HOME="/usr/local/opt/aws-iam-tools/libexec"
+export JAVA_HOME="$(/usr/libexec/java_home)"
+export AWS_CREDENTIAL_FILE=$HOME/.aws-credentials-master
+
+# python
+source /usr/local/bin/virtualenvwrapper.sh
+
+# local creds
+source ~/.env-credentials

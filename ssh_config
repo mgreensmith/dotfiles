@@ -1,14 +1,5 @@
-Host github-cozy
-    HostName github.com
-    User git
-    IdentityFile ~/.ssh/cozy
-    IdentitiesOnly yes
+#Host mktg-web*
+#    ProxyCommand ssh -a -W %h:%p jenkins
 
-Host github-cozyredis
-    HostName github.com
-    User git
-    IdentityFile ~/.ssh/cozy-redis
-    IdentitiesOnly yes
-    
 Host *
 User mgreensmith

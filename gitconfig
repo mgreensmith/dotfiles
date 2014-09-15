@@ -17,8 +17,6 @@
 	summary = true
 [push]
 	default = current
-[branch]
-  autosetuprebase = always
 [github]
 	user = mgreensmith 
 [rerere]
@@ -26,7 +24,19 @@
 [core]
 	excludesfile = /Users/matt/.gitignore
 	editor = /usr/bin/vim
+	precomposeunicode = true
 [credential]
 	helper = osxkeychain
-[init]
-	templatedir = /Users/matt/.git_template
+[gitflow "branch"]
+    master = master
+    develop = develop
+[gitflow "prefix"]
+    feature = feature/
+    release = release/
+    hotfix = hotfix/
+    support = support/
+    versiontag =
+[gitflow "path"]
+    hooks = .git/hooks
+[gitflow "feature.finish"]
+	no-ff = yes

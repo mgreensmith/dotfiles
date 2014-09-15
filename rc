@@ -173,3 +173,21 @@ ruby_gemset() {
 csr() { # [Domain]
     openssl req -out $1.csr -new -newkey rsa:2048 -nodes -keyout $1.private.key
 }
+
+devmode()
+{
+        echo "Using Gemfile.devel for development mode."
+            export BUNDLE_GEMFILE=Gemfile.devel
+}
+
+prodmode()
+{
+        echo "Using Gemfile for production mode."
+            unset BUNDLE_GEMFILE
+}
+
+stagerabbit()
+{
+    echo "Connect to http://localhost:15672"
+    ssh -L 15672:stage-2:15672 stage-2
+}
