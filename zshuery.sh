@@ -1,21 +1,6 @@
-# jQuery did this for JS, we're doing it for zsh
 
-# Checks
-if [[ $(uname) = 'Linux' ]]; then
-    IS_LINUX=1
-fi
-if [[ $(uname) = 'Darwin' ]]; then
-    IS_MAC=1
-fi
-if [[ -x `which brew` ]]; then
-    HAS_BREW=1
-fi
-if [[ -x `which apt-get` ]]; then
-    HAS_APT=1
-fi
-if [[ -x `which yum` ]]; then
-    HAS_YUM=1
-fi
+IS_MAC=1
+
 
 # Settings
 autoload colors; colors;
@@ -47,20 +32,6 @@ load_defaults() {
     setopt hist_ignore_space
 }
 
-# Plug and play
-if [[ -f /etc/zsh_command_not_found ]]; then
-    source /etc/zsh_command_not_found # installed in Ubuntu
-fi
-if [[ -x `which hub` ]]; then
-    function git(){hub $@}
-fi
-if [[ -x `which jump` ]]; then
-    jump() {
-        cd $(JUMPPROFILE=1 command jump $@)
-    }
-    alias j="jump -a"
-fi
-
 ruby_version() { rbenv version-name }
 
 # Current directory in title
@@ -80,17 +51,23 @@ prompts() {
     PROMPT=$1
     RPROMPT=$2
 }
-prompt_char() { # by Steve Losh
-    git branch >/dev/null 2>/dev/null && echo '±' && return
-    hg root >/dev/null 2>/dev/null && echo '☿' && return
+
+prompt_char() {
+    git branch >/dev/null 2>/dev/null && echo "`git branch | grep \* | cut -d\" \" -f2`$" && return
     echo '$'
 }
+
 virtualenv_info() {
     [ $VIRTUAL_ENV ] && echo ' ('`basename $VIRTUAL_ENV`')'
 }
+
+prompts '%{$fg_bold[green]%}$(COLLAPSED_DIR)%{$reset_color%}$(virtualenv_info) %{$fg[yellow]%}$(prompt_char)%{$reset_color%} ' '%{$fg[red]%}$(ruby_version)  $(ruby_gemset)%{$reset_color%}'
+
+
 last_modified() { # by Ryan Bates
     ls -t $* 2> /dev/null | head -n 1
 }
+
 ex() {
     if [[ -f $1 ]]; then
         case $1 in
@@ -114,102 +91,20 @@ ex() {
         echo "'$1' is not a valid file"
     fi
 }
+
 mcd() { mkdir -p "$1" && cd "$1"; }
+
 pj() { python -mjson.tool } # pretty-print JSON
 cj() { curl -sS $@ | pj } # curl JSON
+
 md5() { echo -n $1 | openssl md5 /dev/stdin }
 sha1() { echo -n $1 | openssl sha1 /dev/stdin }
 sha256() { echo -n $1 | openssl dgst -sha256 /dev/stdin }
 sha512() { echo -n $1 | openssl dgst -sha512 /dev/stdin }
-rot13() { echo $1 | tr "A-Za-z" "N-ZA-Mn-za-m" }
-rot47() { echo $1 | tr "\!-~" "P-~\!-O" }
-latrus() { echo $1 | tr "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM" "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ" }
-ruslat() { echo $1 | tr "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ" "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM" }
+
 urlencode() { python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" $1 }
 urldecode() { python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])" $1 }
-path() {
-  echo $PATH | tr ":" "\n" | \
-    awk "{ sub(\"/usr\",   \"$fg_no_bold[green]/usr$reset_color\"); \
-           sub(\"/bin\",   \"$fg_no_bold[blue]/bin$reset_color\"); \
-           sub(\"/opt\",   \"$fg_no_bold[cyan]/opt$reset_color\"); \
-           sub(\"/sbin\",  \"$fg_no_bold[magenta]/sbin$reset_color\"); \
-           sub(\"/local\", \"$fg_no_bold[yellow]/local$reset_color\"); \
-           print }"
-}
-up() { # https://gist.github.com/1474072
-    if [ "$1" != "" -a "$2" != "" ]; then
-        local DIR=$1
-        local TARGET=$2
-    elif [ "$1" ]; then
-        local DIR=$PWD
-        local TARGET=$1
-    fi
-    while [ ! -e $DIR/$TARGET -a $DIR != "/" ]; do
-        DIR=$(dirname $DIR)
-    done
-    test $DIR != "/" && echo $DIR/$TARGET
-}
-if [[ $HAS_BREW -eq 1 ]]; then
-    gimme() { brew install $1 }
-    _gimme() { reply=(`brew search`) }
-elif [[ $HAS_APT -eq 1 ]]; then
-    gimme() { sudo apt-get install $1 }
-elif [[ $HAS_YUM -eq 1 ]]; then
-    gimme() { su -c 'yum install $1' }
-fi
-if [[ $IS_MAC -eq 1 ]]; then
-    pman() { man $1 -t | open -f -a Preview } # open man pages in Preview
-    cdf() { eval cd "`osascript -e 'tell app "Finder" to return the quoted form of the POSIX path of (target of window 1 as alias)' 2>/dev/null`" }
-    vol() {
-        if [[ -n $1 ]]; then osascript -e "set volume output volume $1"
-        else osascript -e "output volume of (get volume settings)"
-        fi
-    }
-    locatemd() { mdfind "kMDItemDisplayName == '$@'wc" }
-    mailapp() {
-        if [[ -n $1 ]]; then msg=$1
-        else msg=$(cat | sed -e 's/\\/\\\\/g' -e 's/\"/\\\"/g')
-        fi
-        osascript -e 'tell application "Mail" to make new outgoing message with properties { Content: "'$msg'", visible: true }' -e 'tell application "Mail" to activate'
-    }
-    sparrow() {
-        if [[ -n $1 ]]; then msg=$1
-        else msg=$(cat | sed -e 's/\\/\\\\/g' -e 's/\"/\\\"/g')
-        fi
-        osascript -e 'tell application "Sparrow" to compose (make new outgoing message with properties { content: "'$msg'" })' -e 'tell application "Sparrow" to activate'
-    }
-    evernote() {
-        if [[ -n $1 ]]; then msg=$1
-        else msg=$(cat | sed -e 's/\\/\\\\/g' -e 's/\"/\\\"/g')
-        fi
-        osascript -e 'tell application "Evernote" to open note window with (create note with text "'$msg'")' -e 'tell application "Evernote" to activate'
-    }
-    # http://apple.stackexchange.com/questions/5435/got-any-tips-or-tricks-for-terminal-in-mac-os-x?page=2&tab=votes#tab-top
-    quit() {
-        for app in $*; do
-            osascript -e 'quit app "'$app'"'
-        done
-    }
-    relaunch() {
-        for app in $*; do
-            osascript -e 'quit app "'$app'"';
-            sleep 2;
-            open -a $app
-        done
-    }
-    selected() {
-      osascript <<EOT
-        tell application "Finder"
-          set theFiles to selection
-          set theList to ""
-          repeat with aFile in theFiles
-            set theList to theList & POSIX path of (aFile as alias) & "\n"
-          end repeat
-          theList
-        end tell
-EOT
-    }
-fi
+path() { echo $PATH | tr ":" "\n" }
 
 # Aliases
 load_aliases() {
@@ -228,26 +123,7 @@ load_aliases() {
     alias beep='echo -n "\a"'
     alias lst="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
 }
-load_lol_aliases() {
-    # Source: http://aur.archlinux.org/packages/lolbash/lolbash/lolbash.sh
-    alias wtf='dmesg'
-    alias onoz='cat /var/log/errors.log'
-    alias rtfm='man'
-    alias visible='echo'
-    alias invisible='cat'
-    alias moar='more'
-    alias icanhas='mkdir'
-    alias donotwant='rm'
-    alias dowant='cp'
-    alias gtfo='mv'
-    alias hai='cd'
-    alias plz='pwd'
-    alias inur='locate'
-    alias nomz='ps aux | less'
-    alias nomnom='killall'
-    alias cya='reboot'
-    alias kthxbai='halt'
-}
+
 
 # Completion
 load_completion() {
@@ -261,9 +137,6 @@ load_completion() {
     setopt complete_in_word
     setopt auto_remove_slash
     unsetopt always_to_end
-    if [[ $HAS_BREW -eq 1 ]]; then
-        compctl -K _gimme gimme
-    fi
     [[ -f ~/.ssh/known_hosts ]] && hosts=(`awk '{print $1}' ~/.ssh/known_hosts | tr ',' '\n' `)
     [[ -f ~/.ssh/config ]] && hosts=($hosts `grep '^Host' ~/.ssh/config | sed s/Host\ // | egrep -v '^\*$'`)
     [[ -f /var/lib/misc/ssh_known_hosts ]] && hosts=($hosts `awk -F "[, ]" '{print $1}' /var/lib/misc/ssh_known_hosts | sort -u`)
@@ -282,8 +155,6 @@ load_completion() {
     zstyle ':completion::complete:*' use-cache 1
     zstyle ':completion::complete:*' cache-path ./cache/
     zstyle ':completion:*:cd:*' ignore-parents parent pwd
-    zstyle ':completion:*:mpg321:*' file-patterns '*.(mp3|MP3):mp3\ files *(-/):directories'
-    zstyle ':completion:*:ogg123:*' file-patterns '*.(ogg|OGG):ogg\ files *(-/):directories'
     zstyle ':completion:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
     zstyle ':completion:*:*:*:processes' command "ps -u `whoami` -o pid,user,comm -w -w"
 

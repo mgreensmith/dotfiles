@@ -27,11 +27,7 @@ export PATH=~/repos/chef-repo/bin:$PATH
 
 load_completion $DOTFILES/zshuery/completion $COZY_PROJECTS_DIR/cozy-dotfiles/util/zsh_completion
 load_correction
-prompt_char() {
-    git branch >/dev/null 2>/dev/null && echo "`git branch | grep \* | cut -d\" \" -f2`$" && return
-    echo '$'
-}
-prompts '%{$fg_bold[green]%}$(COLLAPSED_DIR)%{$reset_color%}$(virtualenv_info) %{$fg[yellow]%}$(prompt_char)%{$reset_color%} ' '%{$fg[red]%}$(ruby_version)  $(ruby_gemset)%{$reset_color%}'
+
 chpwd() {
     update_terminal_cwd
 }
