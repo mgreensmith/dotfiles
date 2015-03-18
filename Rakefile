@@ -9,22 +9,12 @@ end
 dotfiles = {
   '.dotfiles_location' => '',
   '.gitconfig' => 'gitconfig',
-  '.zshrc' => 'zshrc',
-  '.vim_runtime' => 'vimrc',
-  '.ssh/config' => 'ssh_config'
+  '.zshrc' => 'zshrc'
 }
 
 task :install => :update
 
-task :update => [
-  :check_repos,
-  :make_symlinks,
-  :install_vimrc
-]
-
-task :check_repos do
-  sh %{git submodule update --init --recursive}
-end
+task :update => [:make_symlinks]
 
 
 dotfiles.each do |target,src|
@@ -32,9 +22,5 @@ dotfiles.each do |target,src|
     ln_s this(src), home(target)
   end
   task :make_symlinks => home(target) 
-end
-
-task :install_vimrc do
-  sh %{sh vimrc/install_awesome_vimrc.sh}
 end
 

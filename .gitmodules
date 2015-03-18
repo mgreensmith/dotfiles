@@ -1,6 +1,0 @@
-[submodule "zshuery"]
-	path = zshuery
-	url = git://github.com/myfreeweb/zshuery.git
-[submodule "vimrc"]
-	path = vimrc
-	url = git://github.com/amix/vimrc.git
