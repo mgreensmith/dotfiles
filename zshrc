@@ -5,7 +5,7 @@ else
   echo "~/.dotfiles_location not found, reinstall dotfiles"
 fi
 source $DOTFILES/rc
-source $DOTFILES/zshuery/zshuery.sh
+source $DOTFILES/zshuery.sh
 load_defaults
 load_aliases
 export COZY_PROJECTS_DIR="$HOME/repos"
