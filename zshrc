@@ -1,4 +1,6 @@
 
+source ~/.iterm2_shell_integration.`basename $SHELL`
+
 if [[ -e $HOME/.dotfiles_location ]]; then
   export DOTFILES=$(readlink $HOME/.dotfiles_location)
 else
@@ -8,7 +10,7 @@ source $DOTFILES/rc
 source $DOTFILES/zshuery.sh
 load_defaults
 load_aliases
-export COZY_PROJECTS_DIR="$HOME/repos"
+export COZY_PROJECTS_DIR="$HOME/src/cozy-product"
 
 # rbenv
 export RBENV_ROOT=/usr/local/var/rbenv
@@ -23,9 +25,10 @@ export PATH=$PATH:$GOPATH/bin
 export PATH="/opt/chefdk/bin:$PATH"
 export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="$COZY_PROJECTS_DIR/cozy-dotfiles:$PATH"
-export PATH=~/repos/chef-repo/bin:$PATH
+export PATH=~/src/cozy-ops/chef-repo/bin:$PATH
+export PATH=~/bin:$PATH
 
-load_completion $DOTFILES/zshuery/completion $COZY_PROJECTS_DIR/cozy-dotfiles/util/zsh_completion
+load_completion $DOTFILES/completion $COZY_PROJECTS_DIR/cozy-dotfiles/util/zsh_completion
 load_correction
 
 chpwd() {
@@ -45,8 +48,14 @@ export OPSCODE_USER=mgreensmith
 # local creds
 source ~/.env-credentials
 
+# local commands
+source ~/.commands
+
 #export DOCKER_HOST=tcp://192.168.59.103:2376
 #export DOCKER_CERT_PATH=/Users/matt/.boot2docker/certs/boot2docker-vm
 #export DOCKER_TLS_VERIFY=1
 
-#eval "$(hub alias -s)"
+eval "$(hub alias -s)"
+
+source ~/src/cozy-ops/cozy-infrastructure/k8s/profile.sh
+export EDITOR=vim

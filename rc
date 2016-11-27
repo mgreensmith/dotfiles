@@ -12,6 +12,9 @@ alias hi='history | tail -20'
 alias pg="ps ax | grep -v grep | grep -i "
 alias ip="ifconfig | grep 'inet '"
 
+alias c="cd ~/src/cozy-ops/chef-repo"
+alias p="cd ~/src/cozy-product"
+alias inf="cd ~/src/cozy-ops/cozy-infrastructure"
 #alias knife="nocorrect knife"
 alias k="knife"
 alias ks="knife status"
@@ -25,11 +28,18 @@ alias krff="knife role from file"
 alias keff="knife environment from file"
 alias kdff="knife data bag from file"
 alias kcu="knife cookbook upload"
+ku() { knife cookbook upload $@ --freeze }
 alias kssh="knife ssh"
 alias knra="knife node run_list add"
 alias knrr="knife node run_list remove"
 dbagshow() { knife data bag show $@ -Fj }
-edbagshow() { knife data bag show $@ -Fj --secret-file /Users/matt/repos/secret_data_bags/encrypted_data_bag_secret }
+edbagshow() { knife data bag show $@ -Fj --secret-file ~/src/cozy-ops/secret_data_bags/encrypted_data_bag_secret }
+
+alias kefft="knife environment from file ~/src/cozy-ops/chef-repo/environments/testing.json"
+alias keffs="knife environment from file ~/src/cozy-ops/chef-repo/environments/staging.json"
+alias keffp="knife environment from file ~/src/cozy-ops/chef-repo/environments/production.json"
+alias keffc="knife environment from file ~/src/cozy-ops/chef-repo/environments/ci.json"
+alias keffi="knife environment from file ~/src/cozy-ops/chef-repo/environments/infrastructure.json"
 
 alias b="berks"
 alias bu="berks upload"
@@ -48,7 +58,7 @@ alias killvms='for i in `VBoxManage list runningvms | cut -d" " -f1 | sed "s/\"/
 
 alias g='git'
 alias gst='git status'
-alias gl='git pull'
+alias gl='git up'
 alias gup='git fetch && git rebase'
 alias gp='git push'
 gdv() { git diff -w "$@" | view - }
@@ -86,6 +96,11 @@ alias gfh='git flow hotfix'
 alias gfhs='git flow hotfix start'
 alias gfhp='git flow hotfix publish'
 alias gfhf='git flow hotfix finish'
+
+alias rspec='nocorrect rspec'
+alias bundle='nocorrect bundle'
+
+alias gam='~/src/GAM/src/gam.py'
 
 #
 # Will return the current branch name
@@ -185,4 +200,32 @@ prodmode()
 curlping()
 {
     while true; do curl -sf -m3 $1 > /dev/null && echo -n '.' || echo -n 'F'; sleep 1; done
+}
+
+# Export env vars from a .env file when cd to a dir
+cd()
+{
+	debug()
+	{
+		if [ $DOTENVSH_DEBUG = true ]; then
+			echo $1
+		fi
+	}
+
+	loadenv()
+	{
+		debug "Loading $1"
+		for i in $(cat $1); do
+			export $i
+		done
+	}
+
+	builtin cd $@
+	ERR=$?
+
+	if [ $ERR -ne 0 ]; then; return $ERR; fi
+
+	if [ -e .env ]; then
+		loadenv .env
+	fi
 }
