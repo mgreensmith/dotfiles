@@ -21,16 +21,3 @@
 	precomposeunicode = true
 [credential]
 	helper = osxkeychain
-[gitflow "branch"]
-    master = master
-    develop = develop
-[gitflow "prefix"]
-    feature = feature/
-    release = release/
-    hotfix = hotfix/
-    support = support/
-    versiontag =
-[gitflow "path"]
-    hooks = .git/hooks
-[gitflow "feature.finish"]
-	no-ff = yes
