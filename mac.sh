@@ -2,6 +2,9 @@
 
 # ~/.macos — https://mths.be/macos
 
+# CHANGEME on new computers
+COMPNAME="mg013"
+
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we’re about to change
 osascript -e 'tell application "System Preferences" to quit'
@@ -17,10 +20,10 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ###############################################################################
 
 # Set computer name (as done via System Preferences → Sharing)
-sudo scutil --set ComputerName "mg013"
-sudo scutil --set HostName "mg013"
-sudo scutil --set LocalHostName "mg013"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "mg013"
+sudo scutil --set ComputerName "${COMPNAME}"
+sudo scutil --set HostName "${COMPNAME}"
+sudo scutil --set LocalHostName "${COMPNAME}"
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "${COMPNAME}"
 
 # Set standby delay to 24 hours (default is 1 hour)
 #sudo pmset -a standbydelay 86400
